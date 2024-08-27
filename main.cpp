@@ -156,7 +156,18 @@ int main()
 
 					else if(UserData.Type == 2)
 					{
-						txtFile = fopen("test.txt", "r+");
+						txtFile = fopen("test.txt", "a");
+
+						if (txtFile == nullptr)
+						{
+							printf("File open error\n");
+							std::cerr << "File open error: " << strerror(errno) << std::endl;
+							return false;
+						}
+
+						char Buffer[10] = "";
+						fseek(txtFile, 0, SEEK_END);
+
 						fprintf(txtFile, "\n");
 
 						const char* text = UserData.UserID;
@@ -166,6 +177,9 @@ int main()
 						fprintf(txtFile, "%s\n", text);
 
 						SendLength = send(CopySocketList.fd_array[i], Message, (int)strlen(Message), 0);
+
+						fseek(txtFile, 0, SEEK_SET);
+						fclose(txtFile);
 					}
 					
 
