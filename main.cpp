@@ -67,6 +67,7 @@ int main()
 
 	char MainBuffer[1024] = { 0, };
 	char Message[1024] = "OK";
+	char NoMessage[1024] = "No";
 
 	while (true)
 	{
@@ -150,6 +151,8 @@ int main()
 							}
 						}
 
+						SendLength = send(CopySocketList.fd_array[i], NoMessage, (int)strlen(NoMessage), 0);
+
 						fclose(txtFile);
 
 					}
@@ -185,7 +188,8 @@ int main()
 
 					if (SendLength <= 0)
 					{
-						printf("Send Error");
+						int ErrorCode = WSAGetLastError();
+						printf("Send Error: %d\n", ErrorCode);
 						closesocket(CopySocketList.fd_array[i]);
 						FD_CLR(CopySocketList.fd_array[i], &ClientServerSockets);
 					}
